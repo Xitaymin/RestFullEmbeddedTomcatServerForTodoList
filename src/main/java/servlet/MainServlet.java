@@ -6,6 +6,7 @@ import entity.Task;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,8 +26,7 @@ public class MainServlet extends HttpServlet {
     private Map<Integer, Task> tasks;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ServletOutputStream out = resp.getOutputStream();
         out.write("hello heroku".getBytes());
         out.flush();
@@ -38,6 +38,7 @@ public class MainServlet extends HttpServlet {
     //Если id в теле запроса отсутствует или null, сгенерировать id и сохранить задачу как новую. Результатом вернуть JSON с сохраненной задачей.
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        String body = req.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+        req.setCharacterEncoding("UTF-8");
         String body = req.getReader().lines().collect(Collectors.joining());
         System.out.println(body);
 
@@ -52,9 +53,10 @@ public class MainServlet extends HttpServlet {
             tasks.put(task.getId(), task);
             System.out.println(task);
 
+            resp.setCharacterEncoding("UTF-8");
+
             PrintWriter out = resp.getWriter();
             resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
             out.print(mapper.writeValueAsString(task));
             out.flush();
         }
