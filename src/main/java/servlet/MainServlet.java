@@ -26,11 +26,7 @@ public class MainServlet extends HttpServlet {
     private Map<Integer, Task> tasks;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ServletOutputStream out = resp.getOutputStream();
-        out.write("hello heroku".getBytes());
-        out.flush();
-        out.close();
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
     }
 
     @Override
@@ -40,10 +36,6 @@ public class MainServlet extends HttpServlet {
     // сохранить задачу как новую. Результатом вернуть JSON с сохраненной
     // задачей.
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //        String body = req.getReader().lines().reduce("",
-        //        (accumulator, actual) -> accumulator + actual);
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
         String body = req.getReader().lines().collect(Collectors.joining());
         System.out.println(body);
 
@@ -59,14 +51,12 @@ public class MainServlet extends HttpServlet {
             System.out.println(task);
 
             PrintWriter out = resp.getWriter();
-            resp.setContentType("application/json");
             out.print(mapper.writeValueAsString(task));
             out.flush();
             out.close();
         } else {
             tasks.replace(task.getId(), task);
             PrintWriter out = resp.getWriter();
-            resp.setContentType("application/json");
             out.print(mapper.writeValueAsString(task));
             out.flush();
             out.close();
