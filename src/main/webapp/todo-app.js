@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
+
+  // view of pencil an trash bin near the task
   Vue.component('todo-item', {
     props: ['todo'],
     template: `<li>
@@ -11,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   var app = new Vue({
+    //looks like shema for parsing json data
     el: '#todo-app',
     data: {
       todos: [],
@@ -21,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       this.loadTodos()
     },
     methods: {
+      //get all items
       loadTodos: function() {
         var _this = this;
         axios.get('/todo')
@@ -36,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         this.todoText = ''
         this.editingItemId = null;
       },
+      //delete item by id
       deleteItem: function(itemId) {
         var _this = this;
         axios.delete('/todo', { params: { id: itemId } })
@@ -44,29 +49,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
           })
           .catch(error => console.log(error));
       },
+      //sending or replacing task
       saveItem: function() {
         if (this.todoText) {
           var _this = this;
-          axios.post('/todo', 
-              {id : _this.editingItemId, text : _this.todoText}
-            )
-            .then(function(resp) {
-              if (_this.editingItemId) {
-                _this.todos = _this.todos.filter(i => i.id != _this.editingItemId);
-              }
-              _this.todos.push(resp.data);
-              _this.clearTodoText()
-            })
-            .catch(error => console.log(error));
+          axios.post('/todo',
+              {id: _this.editingItemId, text: _this.todoText}
+          )
+              .then(function (resp) {
+                if (_this.editingItemId) {
+                  _this.todos = _this.todos.filter(i => i.id != _this.editingItemId);
+                }
+                _this.todos.push(resp.data);
+                _this.clearTodoText()
+              })
+              .catch(error => console.log(error));
         }
       },
-      clear: function() {
+
+      //deleting all items
+      clear: function () {
         var _this = this;
         axios.delete('/todo')
-          .then(function(resp) {
-            _this.todos = []
-          })
-          .catch(error => console.log(error));
+            .then(function (resp) {
+              _this.todos = []
+            })
+            .catch(error => console.log(error));
       }
     }
   })
