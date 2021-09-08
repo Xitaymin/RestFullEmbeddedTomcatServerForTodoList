@@ -1,5 +1,6 @@
 package servlet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -32,9 +33,17 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String json = getRequestBody(req.getReader());
+        System.out.println(json);
         //todo think about creation task in task storage
-        Task task = mapper.readValue(json, Task.class);
-        task = taskDAO.addOrUpdateIfExist(task);
+        //        Task task = mapper.readValue(json, Task.class);
+        Task task = null;
+        try {
+            //            todo process case with empty id
+            task = taskDAO.createTaskOrUpdateIfExist(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        //        task = taskDAO.addOrUpdateIfExist(task);
         sendResponse(resp.getWriter(), mapper.writeValueAsString(task));
     }
 
@@ -50,8 +59,9 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void init() {
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                         false);
+        //        mapper.configure(DeserializationFeature
+        //        .FAIL_ON_UNKNOWN_PROPERTIES,
+        //                         false);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
@@ -69,6 +79,7 @@ public class MainServlet extends HttpServlet {
             if (taskDAO.deleteById(id)) {
                 resp.setStatus(HttpServletResponse.SC_OK);
             } else {
+                //todo what is correct sc for this case
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         } else {
