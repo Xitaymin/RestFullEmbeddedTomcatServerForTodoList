@@ -1,10 +1,10 @@
-package servlet;
+package controller.servlet;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import dao.TaskDAO;
-import entity.Task;
+import model.dao.TaskDAO;
+import model.entity.Task;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

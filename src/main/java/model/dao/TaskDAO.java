@@ -1,9 +1,9 @@
-package dao;
+package model.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entity.Task;
+import model.entity.Task;
 
 import java.util.Collection;
 import java.util.HashMap;

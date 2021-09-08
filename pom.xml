@@ -39,8 +39,8 @@
 
       <!--      &lt;!&ndash; https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api &ndash;&gt;-->
       <!--      <dependency>-->
-      <!--          <groupId>javax.servlet</groupId>-->
-      <!--          <artifactId>javax.servlet-api</artifactId>-->
+      <!--          <groupId>javax.controller.servlet</groupId>-->
+      <!--          <artifactId>javax.controller.servlet-api</artifactId>-->
       <!--          <version>4.0.1</version>-->
       <!--          <scope>provided</scope>-->
       <!--      </dependency>-->
